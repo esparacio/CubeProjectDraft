@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="edu.elon.elena.cubeuser.Gameplay"
+    tools:showIn="@layout/activity_gameplay"
+    android:background="@drawable/gpback">
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="80dp"
+        android:background="@drawable/buttonup"
+        android:onClick="launchUp"
+        />
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="-90dp"
+        android:background="@drawable/buttondown"
+        android:onClick="launchDown"
+        />
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="-165dp"
+        android:background="@drawable/buttonleft"
+        android:onClick="launchLeft"
+        />
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="60dp"
+        android:background="@drawable/buttonright"
+        android:onClick="launchRight"
+        />
+
+    <Button
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="260dp"
+        android:background="@drawable/buttonup"
+        android:onClick="launchJump"
+        />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="-250dp"
+        android:id="@+id/editedName"
+        />
+
+
+</LinearLayout>
