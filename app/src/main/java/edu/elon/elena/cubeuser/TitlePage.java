@@ -10,13 +10,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
-public class intro extends AppCompatActivity {
+/*
+* Elena Sparacio (c) 2016
+*
+* TitlePage is the first view that opens when the game starts. Clicking
+* will take the user to the homescreen, where they can choose to load
+* a game or create a new game.
+*
+* */
+public class TitlePage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-
 
     }
 

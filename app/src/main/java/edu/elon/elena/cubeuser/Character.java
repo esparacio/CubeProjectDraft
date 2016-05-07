@@ -1,10 +1,14 @@
 package edu.elon.elena.cubeuser;
 
 /**
- * Created by ElenaSparacio on 4/24/16.
+ * Elena Sparacio (c) 2016
+ *
+ * Character is a class that allows the user to move the character
+ * through the 3Darray that represents the background on the cube.
  *
  */
 public class Character {
+
     private A_L3D l3d;
     public int xValue;
     public int yValue;
@@ -13,6 +17,7 @@ public class Character {
     public int[][][] array2;
     public int prevSpace;
     public final int COL = 16711680;
+
 
     public Character(A_L3D aL3d){
         this.l3d = aL3d;
@@ -25,55 +30,72 @@ public class Character {
         this.threeDarray = threeDArray;
     }
 
+    //sets an array at the beginning of the level. Sets prevSpace (the previous space)
+    //to equal the color of the cube (currently red, will change).
     public void setArray(int [][][] threeDarray){
         this.threeDarray = threeDarray;
         //value of a platform (assuming array is created at the start of the game)
         prevSpace = 16776960;
     }
 
+    //sets the x value of the character in the array
     public void setxValue(int xValue){
         this.xValue = xValue;
     }
 
+    //sets the y value of the character in the array
     public void setyValue(int yValue){
         this.yValue = yValue;
     }
 
+    //sets the z value of the character in the array
     public void setzValue(int zValue){
         this.zValue = zValue;
     }
 
+    //gets the x value of the character in the array
     public int getxValue(){
         return xValue;
     }
 
+    //gets the y value of the character in the array
     public int getyValue(){
         return yValue;
     }
 
+    //gets the z value of the character in the array
     public int getzValue(){
         return zValue;
     }
 
-    public int getPrevSpace(){
-        return prevSpace;
-    }
+    //gets the value in the previous space, or the space the
+    //character was in before moving - returns a color
+    public int getPrevSpace(){ return prevSpace; }
 
+    //sets the value in the previous space
     public void setPrevSpace(int prevSpace){
         this.prevSpace = prevSpace;
     }
 
+
+    //allows the user to move up in the game. Updates all the values of the
+    //character's location, and previous space. Accounts for teleporting
+    //as well.
     public void moveUp(){
+
+        //gets current values
         int x = this.xValue;
         int y = this.yValue;
         int z = this.zValue;
 
-        //location appears to be working.
-
-        System.out.println("Current location: " + x + y + z);
+        //Allows movement as long as it is within the constraints of the
+        //cube
         if(y<=6) {
+
             //store the next character location
             int aboveSpace = threeDarray[x][y + 1][z];
+
+            //only moves if the aboveSpace isn't air
             if(!(aboveSpace==0||aboveSpace==255)) {
                 //move character in array
                 threeDarray[x][y + 1][z] = COL;
@@ -87,7 +109,6 @@ public class Character {
                 setPrevSpace(aboveSpace);
                 //reset character location
                 setyValue(y + 1);
-                System.out.println("New location: " + getxValue() + getyValue() + getzValue());
                 l3d.update();
                 if(aboveSpace==5688359||aboveSpace==5688356){
                     teleport(aboveSpace,getxValue(),getyValue());
@@ -105,12 +126,17 @@ public class Character {
 
     }
 
+    //allows the user to move down in the game. Updates all the values of the
+    //character's location, and previous space. Accounts for teleporting
+    //as well.
     public void moveDown(){
+
+        //gets the location
         int x = this.xValue;
         int y = this.yValue;
         int z = this.zValue;
-        System.out.println("Current location: " + x + y + z);
 
+        //Allows movement as long as within constraints of the cube
         if(y>=1) {
             //store the next character location
             int belowSpace = threeDarray[x][y - 1][z];
@@ -126,8 +152,6 @@ public class Character {
                 setPrevSpace(belowSpace);
                 //reset character location
                 setyValue(y - 1);
-                System.out.println("New location: " + getxValue() + getyValue() + getzValue());
-
                 l3d.update();
 
             }
@@ -141,12 +165,17 @@ public class Character {
 
     }
 
+    //allows the user to move right in the game. Updates all the values of the
+    //character's location, and previous space. Accounts for teleporting
+    //as well.
     public void moveRight(){
+
+        //gets location
         int x = this.xValue;
         int y = this.yValue;
         int z = this.zValue;
-        System.out.println("Current location: " + x + y + z);
 
+        //allows user to move only within constraints of the cube
         if(x<=6) {
             //store the next character location
             int rightSpace = threeDarray[x+1][y][z];
@@ -163,7 +192,6 @@ public class Character {
                 //reset character location
                 setxValue(x + 1);
                 l3d.update();
-                System.out.println("New location: " + getxValue() + getyValue() + getzValue());
 
 
             }
@@ -177,12 +205,16 @@ public class Character {
 
     }
 
+    //allows the user to move left in the game. Updates all the values of the
+    //character's location, and previous space. Accounts for teleporting
+    //as well.
     public void moveLeft(){
+        //gets current location
         int x = this.xValue;
         int y = this.yValue;
         int z = this.zValue;
-        System.out.println("Current location: " + x + y + z);
 
+        //allows users to move only in range of cube
         if(x>=1) {
             //store the next character location
             int leftSpace = threeDarray[x-1][y][z];
@@ -200,8 +232,6 @@ public class Character {
                 //reset character location
                 setxValue(x - 1);
                 l3d.update();
-                System.out.println("New location: " + getxValue() + getyValue() + getzValue());
-
             }
             else{
                 System.out.println("You died...");
@@ -213,9 +243,17 @@ public class Character {
 
     }
 
-    //Teleporter stuff here
+
+    //Teleporters the user if they land on a teleporter spcae
 
     public void teleport(int space, int prevX, int prevY){
+
+        //this method is long and complicated, having variables for teleporter
+        //locations may be better - but this works for now. It searches through
+        //the layer (only in 2 dimensions, as teleporters don't work through layers)
+        //and finds the corresponding teleport landing location. It then moves
+        //the user there.
+
         for(int e=0;e<8;e++) {
             for (int j = 0; j < 8; j++) {
                 int output = threeDarray[e][j][getzValue()];
@@ -244,6 +282,10 @@ public class Character {
 
 
 
+    //allows the user to move through a layer in the game. Updates all the values of the
+    //character's location, and previous space.
+
+    //Currently unfinished
     public void scrollUp(){
 
         array2 = new int[8][8][8];

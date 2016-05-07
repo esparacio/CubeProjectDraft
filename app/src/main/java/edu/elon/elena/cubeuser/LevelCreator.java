@@ -18,10 +18,6 @@ import java.util.Scanner;
  */
 public class LevelCreator {
 
-    public void createLevel(){
-
-    }
-
     public int colorChooser(String aLetter){
         int color =0x000000;
         if(aLetter == null){

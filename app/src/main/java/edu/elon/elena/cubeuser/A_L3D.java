@@ -10,7 +10,11 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * Created by ElenaSparacio on 4/1/16.
+ * Joel Hollingsworth (c) 2016
+ *
+ * A_L3D is a class that connects the cube with the phone, and
+ * has methods to update the cube.
+ *
  */
 public class A_L3D {
 

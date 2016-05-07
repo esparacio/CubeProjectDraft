@@ -21,15 +21,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class New extends AppCompatActivity {
 
+/*
+* Elena Sparacio (c) 2016
+*
+* NewGame is the beginning of a new game. Currently, it starts an animation.
+* After the animation, a fresh Gameplay screen will start with level one loaded.
+* This has yet to be implemented.
+* */
+
+public class NewGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
 
-         final VideoView videoView = (VideoView) findViewById(R.id.clip1);
+        //plays the video
+        final VideoView videoView = (VideoView) findViewById(R.id.clip1);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
                 + R.raw.cubetest);
          videoView.setVideoURI(video);
@@ -39,7 +48,6 @@ public class New extends AppCompatActivity {
                  videoView.start();
                   }
              });
-
 
 
     }

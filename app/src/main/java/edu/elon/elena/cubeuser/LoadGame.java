@@ -17,65 +17,82 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class Gameplay extends AppCompatActivity {
+/*
+* Elena Sparacio (c) 2016
+*
+* LoadGame loads a previous file and is where all of the gameplay
+* action begins. Players can move around the cube by button press.
+*
+* */
+
+public class LoadGame extends AppCompatActivity {
 
     private A_L3D l3d;
     private final String filename = "preferences.txt";
     int[][][] threeDarray = new int[8][8][8];
     private Character aCharacter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
         launchName(null);
+
+        //reads a file and creates the appropriate background for the level
         levelCreator();
+
+        //creates a new cube character for movement
         aCharacter = new Character(l3d);
         setArray();
 
     }
 
+    //Sets an array in the character class once the level is read
     public void setArray(){
         aCharacter.setArray(threeDarray);
-        //NEW
         //setting the start point of the game for the level - this will change if there is a saved game
         aCharacter.setxValue(0);
         aCharacter.setyValue(0);
         aCharacter.setzValue(7);
     }
 
-
-    //The Goal is to cut findCharacter out so that the program runs at O(1) for each movement
+    //On button press, this moves the cube character up
     public void launchUp(View view){
         aCharacter.moveUp();
 
     }
 
+    //On button press, this moves the cube character down
     public void launchDown(View view){
         aCharacter.moveDown();
 
     }
 
+    //On button press, this moves the cube character right
     public void launchRight(View view){
         aCharacter.moveRight();
 
     }
 
+    //On button press, this moves the cube character left
     public void launchLeft(View view){
         aCharacter.moveLeft();
 
     }
 
-    //Scrollable layers here (do with two buttons, eventually turn into a scrollable interface
+    //Allows the player to scroll forward through the layers
     public void launchScrollUp(View view){
         aCharacter.scrollUp();
     }
 
 
+    //Reads the file and welcomes the user back by name - eventually this method will
+    //update the level and where the user saved
     public void launchName(View view) {
+
         Context context = getBaseContext();
         BufferedReader reader = null;
+
         try {
             InputStream in = context.openFileInput(filename);
             Scanner scanner = new Scanner(new InputStreamReader(in));
@@ -98,42 +115,64 @@ public class Gameplay extends AppCompatActivity {
         }
     }
 
+    //this method creates a level based upon file input
     public void levelCreator(){
 
+        //creates a new instance of an L3D cube
+        l3d = new A_L3D();
+
+        //opens the file
         AssetManager assetManager = getAssets();
         InputStream input = null;
-        l3d = new A_L3D();
+
         try {
             input = assetManager.open("level1.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
-            Scanner in = new Scanner(new InputStreamReader(input));
-            int yval = 7;
-            int level = 7;
 
+            //reads the input file
+            Scanner in = new Scanner(new InputStreamReader(input));
+        
+            int yValue = 7;
+            int zValue = 7;
+
+            //for each line in the file
             while (in.hasNextLine()) {
+
+                //creates a scanner for the line
                 String line = in.nextLine();
-                Scanner scanny = new Scanner(line);
-                scanny.useDelimiter(",");
+                Scanner lineScanner = new Scanner(line);
+                lineScanner.useDelimiter(",");
+
+                //for each letter in the line 
                 for(int i = 0; i<8; i++){
-                    String space = scanny.next();
-                    if(space.equals("~")){
-                        level--;
-                        yval = 8;
+                    
+                    String letter = lineScanner.next();
+                    
+                    //the "~" character is written in the file to indicate a new layer 
+                    if(letter.equals("~")){
+                        zValue--;
+                        yValue = 8;
                     }
-                    if(space.equals("*")){
+                    //the "*" character is written in the file to indicate the file has completed
+                    if(letter.equals("*")){
                         return;
                     }
-                    LevelCreator levels = new LevelCreator();
-                    int color = levels.colorChooser(space);
 
-                    if(!((space.equals("~")||space.equals("0")))){
-                        threeDarray[i][yval][level] = color;
-                        l3d.setVoxel(i, yval, level, color);
+                    //assign each letter with a color to put in the array
+                    LevelCreator levels = new LevelCreator();
+                    int color = levels.colorChooser(letter);
+
+                    //fill the array (i = xValue)
+                    if(!((letter.equals("~")||letter.equals("0")))){
+                        threeDarray[i][yValue][zValue] = color;
+                        l3d.setVoxel(i, yValue, zValue, color);
                     }
                 }
-                yval--;
+                //decrement the y Value
+                yValue--;
+                //update the cube
                 l3d.update();
             }
         in.close();
