@@ -21,6 +21,9 @@ public class Gameplay extends AppCompatActivity {
 
     private A_L3D l3d;
     private final String filename = "preferences.txt";
+    int[][][] threeDarray = new int[8][8][8];
+    private Character aCharacter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +31,47 @@ public class Gameplay extends AppCompatActivity {
         setContentView(R.layout.activity_gameplay);
         launchName(null);
         levelCreator();
-
+        aCharacter = new Character(l3d);
+        setArray();
 
     }
 
+    public void setArray(){
+        aCharacter.setArray(threeDarray);
+        //NEW
+        //setting the start point of the game for the level - this will change if there is a saved game
+        aCharacter.setxValue(0);
+        aCharacter.setyValue(0);
+        aCharacter.setzValue(7);
+    }
+
+
+    //The Goal is to cut findCharacter out so that the program runs at O(1) for each movement
     public void launchUp(View view){
+        aCharacter.moveUp();
 
     }
+
+    public void launchDown(View view){
+        aCharacter.moveDown();
+
+    }
+
+    public void launchRight(View view){
+        aCharacter.moveRight();
+
+    }
+
+    public void launchLeft(View view){
+        aCharacter.moveLeft();
+
+    }
+
+    //Scrollable layers here (do with two buttons, eventually turn into a scrollable interface
+    public void launchScrollUp(View view){
+        aCharacter.scrollUp();
+    }
+
 
     public void launchName(View view) {
         Context context = getBaseContext();
@@ -62,6 +99,7 @@ public class Gameplay extends AppCompatActivity {
     }
 
     public void levelCreator(){
+
         AssetManager assetManager = getAssets();
         InputStream input = null;
         l3d = new A_L3D();
@@ -89,7 +127,9 @@ public class Gameplay extends AppCompatActivity {
                     }
                     LevelCreator levels = new LevelCreator();
                     int color = levels.colorChooser(space);
-                    if(!(space.equals("0"))){
+
+                    if(!((space.equals("~")||space.equals("0")))){
+                        threeDarray[i][yval][level] = color;
                         l3d.setVoxel(i, yval, level, color);
                     }
                 }
@@ -98,6 +138,8 @@ public class Gameplay extends AppCompatActivity {
             }
         in.close();
         }
+
+
 
 
 

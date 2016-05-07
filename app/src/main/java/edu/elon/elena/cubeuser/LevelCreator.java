@@ -34,8 +34,17 @@ public class LevelCreator {
             case "P": //this is a platform! You can jump and stand on these
                 color = 0xFFFF00;
                 break;
-            case "T": //this is a teleporter. Self explanatory
-                color = 0x00FF00;
+            case "A": //Teleporter start 1
+                color = 0x56CC27;
+                break;
+            case "D": //Teleporter end 1
+                color = 0x56CC26;
+                break;
+            case "F": //Teleporter start 2
+                color = 0x56CC24;
+                break;
+            case "E": //Teleporter end 2
+                color = 0x56CC25;
                 break;
             case "S": //this is the starting point of the game
                 color = 0xFF0000;
