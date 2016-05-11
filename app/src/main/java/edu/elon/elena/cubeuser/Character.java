@@ -1,5 +1,13 @@
 package edu.elon.elena.cubeuser;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+
+import static android.os.SystemClock.sleep;
+
+
 /**
  * Elena Sparacio (c) 2016
  *
@@ -18,9 +26,13 @@ public class Character {
     public int prevSpace;
     public final int COL = 16711680;
 
+    //tester
+    public Context context;
 
-    public Character(A_L3D aL3d){
+
+    public Character(A_L3D aL3d, Context context){
         this.l3d = aL3d;
+        this.context = context;
 
     }
     public Character(int xValue, int yValue, int zValue, int[][][] threeDArray) {
@@ -35,7 +47,7 @@ public class Character {
     public void setArray(int [][][] threeDarray){
         this.threeDarray = threeDarray;
         //value of a platform (assuming array is created at the start of the game)
-        prevSpace = 16776960;
+        prevSpace = 660818;
     }
 
     //sets the x value of the character in the array
@@ -77,6 +89,90 @@ public class Character {
         this.prevSpace = prevSpace;
     }
 
+    public void checkWin(){
+
+        //if you land on the win space, launch the win activity
+        if(prevSpace==0x4f1212){
+
+            //fills the cube with black
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
+                    for (int z = 0; z < 8; z++) {
+                        l3d.setVoxel(x, y, z, 0);
+                    }
+                }
+            }
+            l3d.update();
+
+            //pauses for the animation
+            sleep(200);
+            int time = 0;
+
+
+            //loop to make it slowly turn black
+            while(time < 8) {
+
+                l3d.setVoxel(4,4,4,660818);
+
+                l3d.update();
+
+                time++;
+                sleep(200);
+            }
+
+
+                Intent i1 = new Intent (context, YouWin.class);
+            i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i1);
+        }
+    }
+
+
+    //Animation for when the cube dies :(
+    //Has a really just awful running time but I can't find a way around it
+    public void youDied(){
+
+        //fills the cube with blue
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                for (int z = 0; z < 8; z++) {
+                    l3d.setVoxel(x, y, z, 660818);
+                }
+            }
+        }
+        l3d.update();
+
+        //pauses for the animation
+        sleep(200);
+        int time = 0;
+        int yVal = 7;
+        int yVal2 = 8;
+
+        //loop to make it slowly turn black
+        while(time < 8) {
+            for (int x = 0; x < 8; x++) {
+                for (int y = yVal; y < yVal2; y++) {
+                    for (int z = 0; z < 8; z++) {
+                        l3d.setVoxel(x, y, z, 0);
+                    }
+                }
+            }
+            l3d.update();
+            yVal--;
+            yVal2--;
+            time++;
+            sleep(200);
+
+        }
+
+        //launch the "You Died" screen
+        Intent i1 = new Intent (context, YouDied.class);
+        i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i1);
+
+
+    }
+
 
     //allows the user to move up in the game. Updates all the values of the
     //character's location, and previous space. Accounts for teleporting
@@ -88,6 +184,8 @@ public class Character {
         int y = this.yValue;
         int z = this.zValue;
 
+        System.out.println("Platform? "+threeDarray[x][y+1][z]);
+
         //Allows movement as long as it is within the constraints of the
         //cube
         if(y<=6) {
@@ -96,7 +194,7 @@ public class Character {
             int aboveSpace = threeDarray[x][y + 1][z];
 
             //only moves if the aboveSpace isn't air
-            if(!(aboveSpace==0||aboveSpace==255)) {
+            if(!(aboveSpace==0||aboveSpace==5921370)) {
                 //move character in array
                 threeDarray[x][y + 1][z] = COL;
                 //fill character's previous location with the old value
@@ -113,11 +211,13 @@ public class Character {
                 if(aboveSpace==5688359||aboveSpace==5688356){
                     teleport(aboveSpace,getxValue(),getyValue());
                 }
+                checkWin();
 
             }
             else{
-                System.out.println("You died...");
+                youDied();
             }
+
 
         }
         else{
@@ -140,7 +240,7 @@ public class Character {
         if(y>=1) {
             //store the next character location
             int belowSpace = threeDarray[x][y - 1][z];
-            if(!(belowSpace==0||belowSpace==255)) {
+            if(!(belowSpace==0||belowSpace==5921370)) {
                 //move character in array
                 threeDarray[x][y - 1][z] = COL;
                 //fill character's previous location with the old value
@@ -153,10 +253,12 @@ public class Character {
                 //reset character location
                 setyValue(y - 1);
                 l3d.update();
+                checkWin();
+
 
             }
             else{
-                System.out.println("You died...");
+                youDied();
             }
         }
         else{
@@ -179,7 +281,7 @@ public class Character {
         if(x<=6) {
             //store the next character location
             int rightSpace = threeDarray[x+1][y][z];
-            if(!(rightSpace==0||rightSpace==255)) {
+            if(!(rightSpace==0||rightSpace==5921370)) {
                 //move character in array
                 threeDarray[x + 1][y][z] = COL;
                 //fill character's previous location with the old value
@@ -192,11 +294,13 @@ public class Character {
                 //reset character location
                 setxValue(x + 1);
                 l3d.update();
+                checkWin();
+
 
 
             }
             else{
-                System.out.println("You died...");
+                youDied();
             }
         }
         else{
@@ -219,7 +323,7 @@ public class Character {
             //store the next character location
             int leftSpace = threeDarray[x-1][y][z];
 
-            if(!(leftSpace==0||leftSpace==255)) {
+            if(!(leftSpace==0||leftSpace==5921370)) {
                 //move character in array
                 threeDarray[x - 1][y][z] = COL;
                 //fill character's previous location with the old value
@@ -232,9 +336,11 @@ public class Character {
                 //reset character location
                 setxValue(x - 1);
                 l3d.update();
+                checkWin();
+
             }
             else{
-                System.out.println("You died...");
+                youDied();
             }
         }
         else{
@@ -285,46 +391,66 @@ public class Character {
     //allows the user to move through a layer in the game. Updates all the values of the
     //character's location, and previous space.
 
-    //Currently unfinished
-    public void scrollUp(){
+    public void scrollUp() {
 
-        array2 = new int[8][8][8];
-        for(int e=0;e<8;e++) {
-            for (int j = 0; j < 8; j++) {
-                for (int k = 0; k < 8; k++) {
+        //gets current location
+        int x = this.xValue;
+        int y = this.yValue;
+        int z = this.zValue;
 
-                    int output = threeDarray[e][j][k];
-                    if(!(k==7)) {
-                        array2[e][j][k + 1] = output;
+        int backSpace = threeDarray[x][y][z-1];
+
+        if (!(backSpace == 0 || backSpace == 5921370)) {
+            array2 = new int[8][8][8];
+            threeDarray[x][y][z] = prevSpace;
+            System.out.println("X: " + x + " Y: " + y + " Z: " + z + "val: " +prevSpace);
+            for (int e = 0; e < 8; e++) {
+                for (int j = 0; j < 8; j++) {
+                    for (int k = 0; k < 8; k++) {
+
+                        int output = threeDarray[e][j][k];
+                        //move forward if not the last layer
+                        if (!(k == 7)) {
+                            array2[e][j][k + 1] = output;
                         }
-                    if(k==7){
-                        //instead of 5, it would be 8-num of layers)
-                        array2[e][j][5] = output;
-                    }
+                        //move the last layer where it belongs (8-num layers)
+                        if (k == 7) {
+                            //instead of 5, it would be 8-num of layers)
+                            array2[e][j][5] = output;
+                        }
                     }
                 }
             }
 
-    for(int e=0;e<8;e++) {
-        for (int j = 0; j < 8; j++) {
-            for (int k = 0; k < 8; k++) {
-                int output = array2[e][j][k];
-                l3d.setVoxel(e, j, k, output);
+
+            //set all the voxels of array 2
+            for (int e = 0; e < 8; e++) {
+                for (int j = 0; j < 8; j++) {
+                    for (int k = 0; k < 8; k++) {
+                        int output = array2[e][j][k];
+                        l3d.setVoxel(e, j, k, output);
+                    }
+                }
             }
+
+
+            //make character stay where he is
+            l3d.setVoxel(getxValue(), getyValue(), getzValue(), COL);
+            //set the previous space
+            prevSpace = backSpace;
+
+            checkWin();
+            //update the cube and reset the array
+            l3d.update();
+            threeDarray = array2;
+
+
+        }
+        else{
+            youDied();
+
         }
     }
-        //make character stay where he is, fill the new space with a platform
-        l3d.setVoxel(getxValue(),getyValue(),getzValue(),COL);
-        //fill in space...
-        l3d.setVoxel(getxValue(),getyValue(),(getzValue()-2),getPrevSpace());
-        l3d.update();
-        threeDarray = array2;
-
-
-
-        System.out.println("Where is char: " + getxValue() + getyValue() + getzValue());
-
-}
 
 
 

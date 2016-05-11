@@ -1,6 +1,7 @@
 package edu.elon.elena.cubeuser;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+
+import static android.os.SystemClock.sleep;
 
 
 /*
@@ -42,13 +45,18 @@ public class NewGame extends AppCompatActivity {
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
                 + R.raw.cubetest);
          videoView.setVideoURI(video);
-         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
-            public void onPrepared(MediaPlayer mp) {
+         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+             public void onPrepared(MediaPlayer mp) {
                  videoView.requestFocus();
                  videoView.start();
-                  }
-             });
+             }
+         });
 
 
+    }
+
+    public void launchLoad(View view) {
+        Intent intent = new Intent(this, LoadGame.class);
+        startActivity(intent);
     }
 }

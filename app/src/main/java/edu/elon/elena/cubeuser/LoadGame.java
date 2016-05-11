@@ -1,6 +1,7 @@
 package edu.elon.elena.cubeuser;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+
+import static android.os.SystemClock.sleep;
 
 /*
 * Elena Sparacio (c) 2016
@@ -41,10 +44,17 @@ public class LoadGame extends AppCompatActivity {
         //reads a file and creates the appropriate background for the level
         levelCreator();
 
+        Context context = getBaseContext();
+
         //creates a new cube character for movement
-        aCharacter = new Character(l3d);
+        aCharacter = new Character(l3d,context);
         setArray();
 
+    }
+
+    public void startOver(){
+        Intent intent = new Intent(this, YouDied.class);
+        startActivity(intent);
     }
 
     //Sets an array in the character class once the level is read
@@ -83,6 +93,7 @@ public class LoadGame extends AppCompatActivity {
     //Allows the player to scroll forward through the layers
     public void launchScrollUp(View view){
         aCharacter.scrollUp();
+
     }
 
 

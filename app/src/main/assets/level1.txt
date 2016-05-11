@@ -10,10 +10,10 @@ S,P,P,P,B,B,B,B
 P,B,B,B,B,B,B,P
 P,P,B,B,B,B,B,B
 B,P,B,B,B,P,P,P
-T,P,B,B,B,B,B,B
+E,P,B,B,B,B,B,B
 B,P,P,B,B,B,B,B
 B,B,B,B,B,B,B,B
-B,B,B,B,B,B,T,B
+B,B,B,B,B,B,F,B
 B,B,P,P,C,P,P,B
 0,0,0,0,0,0,0,~
 P,B,B,P,P,C,P,G
