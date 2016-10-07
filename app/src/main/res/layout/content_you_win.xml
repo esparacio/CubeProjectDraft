@@ -12,4 +12,11 @@
     tools:context="edu.elon.elena.cubeuser.YouWin"
     tools:showIn="@layout/activity_you_win">
 
+    <Button
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:background="@android:color/transparent"
+        android:onClick="launchLoad"
+        />
+
 </RelativeLayout>

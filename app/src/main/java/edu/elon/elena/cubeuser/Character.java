@@ -26,7 +26,6 @@ public class Character {
     public int prevSpace;
     public final int COL = 16711680;
 
-    //tester
     public Context context;
 
 
@@ -121,7 +120,7 @@ public class Character {
             }
 
 
-                Intent i1 = new Intent (context, YouWin.class);
+            Intent i1 = new Intent (context, YouWin.class);
             i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i1);
         }
@@ -129,7 +128,6 @@ public class Character {
 
 
     //Animation for when the cube dies :(
-    //Has a really just awful running time but I can't find a way around it
     public void youDied(){
 
         //fills the cube with blue

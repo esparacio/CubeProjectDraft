@@ -30,7 +30,7 @@ public class A_L3D {
         // create the cube model
         cube = new int[SIDE][SIDE][SIDE];
 
-        ipAddress = "192.168.1.101";
+        ipAddress = "192.168.1.138";
         try {
             cubeAddress = InetAddress.getByName(ipAddress);
             socket = new DatagramSocket();

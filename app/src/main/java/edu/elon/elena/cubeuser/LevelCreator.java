@@ -18,6 +18,70 @@ import java.util.Scanner;
  */
 public class LevelCreator {
 
+    public int[][][] loadLevel(A_L3D l3d, AssetManager assetManager, int level){
+
+        int[][][] threeDarray = new int[8][8][8];
+
+        //opens the file
+        InputStream input = null;
+
+        try {
+            String levelFile = "level" + level + ".txt";
+            input = assetManager.open(levelFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //reads the input file
+        Scanner in = new Scanner(new InputStreamReader(input));
+
+        int yValue = 7;
+        int zValue = 7;
+
+        //for each line in the file
+        while (in.hasNextLine()) {
+
+            //creates a scanner for the line
+            String line = in.nextLine();
+            Scanner lineScanner = new Scanner(line);
+            lineScanner.useDelimiter(",");
+
+            //for each letter in the line
+            for(int i = 0; i<8; i++){
+
+                String letter = lineScanner.next();
+
+                //the "~" character is written in the file to indicate a new layer
+                if(letter.equals("~")){
+                    zValue--;
+                    yValue = 8;
+                }
+                //the "*" character is written in the file to indicate the file has completed
+                if(letter.equals("*")){
+                    return threeDarray;
+                }
+
+                //assign each letter with a color to put in the array
+                int color = colorChooser(letter);
+
+                //fill the array (i = xValue)
+                if(!((letter.equals("~")||letter.equals("0")))){
+                    threeDarray[i][yValue][zValue] = color;
+                    l3d.setVoxel(i, yValue, zValue, color);
+                }
+            }
+            //decrement the y Value
+            yValue--;
+            //update the cube
+            l3d.update();
+        }
+        in.close();
+
+        return threeDarray;
+    }
+
+
     public int colorChooser(String aLetter){
         int color =0x000000;
         if(aLetter == null){

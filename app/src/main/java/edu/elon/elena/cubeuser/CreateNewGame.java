@@ -27,8 +27,6 @@ import java.io.Writer;
 
 public class CreateNewGame extends AppCompatActivity {
 
-
-    private final String filename = "preferences.txt";
     private EditText cubeName;
     private String color;
 
@@ -86,32 +84,16 @@ public class CreateNewGame extends AppCompatActivity {
     public void launchNew(View view) {
 
         String name = cubeName.getText().toString();
-        String cubeNameandColor = name + "~" + color;
+        int level = 1;
 
-        //write to a file
-        Context context = getBaseContext();
-        Writer writer = null;
-
-        try {
-            OutputStream out = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            writer = new OutputStreamWriter(out);
-            writer.write(cubeNameandColor);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        //default color
+        if(color==null){
+            color = "Blue";
         }
+
+        Context context = getBaseContext();
+        PlayerPrefs prefs = new PlayerPrefs();
+        prefs.setAll(name, color, level, context);
 
         //Launch new game
         Intent intent = new Intent(this, NewGame.class);
